@@ -17,7 +17,8 @@ Buffer.prototype.XORR = (otherBuffer) ->
 
 Helpers = {}
 
-bigrams = ['th','en','ng','he','ed','of','in','to','al','er','it','de','an','ou','se','re','ea','le','nd','hi','sa','at','is','si','on','or','ar','nt','ti','ve','ha','as','ra','es','te','ld','st','et','ur']
+bigrams  = ['th','en','ng','he','ed','of','in','to','al','er','it','de','an','ou','se','re','ea','le','nd','hi','sa','at','is','si','on','or','ar','nt','ti','ve','ha','as','ra','es','te','ld','st','et','ur']
+trigrams = ['the','and','tha','ent','ing','ion','tio','for','nde','has','nce','edt','tis','oft','sth','men']
 
 occurrences = (string, subString, allowOverlapping) ->
   if (subString.length <= 0) then return 0
@@ -34,11 +35,17 @@ occurrences = (string, subString, allowOverlapping) ->
   return n
 
 Helpers.scoreString = (str) ->
+  str = str.toLowerCase()
+  monogramValue = 0.1
+  bigramValue = 1
+  trigramValue = 2.5
+
   score = 0
-  bigrams.forEach (b) ->
-    # console.log "checking #{b} in #{str}"
-    # console.log "found #{occurrences(str,b, true)}"
-    score += occurrences(str, b)
+  for i in [0..str.length]
+    score += monogramValue if (str.charCodeAt(i) > 65 && str.charCodeAt(i) < 122)
+  bigrams.forEach (b) -> score += bigramValue * occurrences(str, b)
+  trigrams.forEach (t) -> score += trigramValue * occurrences(str, t)
+  # console.log("#{score}: #{str}")
   return score
 
 module.exports = Helpers

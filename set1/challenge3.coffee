@@ -13,6 +13,7 @@ describe 'challenge 3', ->
       key = String.fromCharCode(i)
       decoded = cipherText.XORR(new Buffer(key)).toString('utf8')
       score = Helpers.scoreString(decoded)
+      
       if score > bestResult.score
         bestResult = {key: key, decoded: decoded, score: score}
 
