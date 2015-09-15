@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js -e js,coffee -w set1"
+    "test": "nodemon index.js -e js,coffee -w set1 -w support"
   },
   "author": "",
   "license": "ISC",
