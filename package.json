@@ -1,0 +1,20 @@
+{
+  "name": "cryptopals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js -e js,coffee -w set1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^2.3.2",
+    "nodemon": "^1.4.1"
+  },
+  "dependencies": {
+    "coffee-script": "^1.10.0",
+    "colors": "^1.1.2",
+    "lodash": "^3.10.1"
+  }
+}
