@@ -34,18 +34,47 @@ occurrences = (string, subString, allowOverlapping) ->
     else break
   return n
 
+isEnglishAlphabet = (charCode) ->
+  return 0x41 <= charCode <= 0x5A
+
+isCommonChar = (charCode) ->
+  return 0x20 <= charCode <= 0x7D
+
 Helpers.scoreString = (str) ->
-  str = str.toLowerCase()
+  lowerStr = str.toLowerCase()
   monogramValue = 0.1
   bigramValue = 1
   trigramValue = 2.5
 
   score = 0
-  for i in [0..str.length]
-    score += monogramValue if (str.charCodeAt(i) > 65 && str.charCodeAt(i) < 122)
-  bigrams.forEach (b) -> score += bigramValue * occurrences(str, b)
-  trigrams.forEach (t) -> score += trigramValue * occurrences(str, t)
-  # console.log("#{score}: #{str}")
+  for i in [0..lowerStr.length]
+    monogramCode = lowerStr.charCodeAt(i)
+    if isCommonChar(monogramCode)
+      score += monogramValue
+      if isEnglishAlphabet(monogramCode)
+        score += monogramValue
+    else
+      score -= monogramValue
+
+  bigrams.forEach (b) -> score += bigramValue * occurrences(lowerStr, b)
+  trigrams.forEach (t) -> score += trigramValue * occurrences(lowerStr, t)
+  # console.log("#{score}: #{str}") if score > 8
   return score
+
+Helpers.decodeXORCipher = (cipher) ->
+  start = 'A'.charCodeAt(0)
+  end = 'z'.charCodeAt(0)
+
+  bestResult = {score: 0}
+
+  for i in [0..128]
+    key = String.fromCharCode(i)
+    decoded = cipher.XORR(new Buffer(key)).toString('utf8')
+    score = Helpers.scoreString(decoded)
+    
+    if score > bestResult.score
+      bestResult = {key: key, decoded: decoded, score: score}
+
+  return bestResult
 
 module.exports = Helpers
