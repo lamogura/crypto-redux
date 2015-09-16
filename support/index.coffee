@@ -1,19 +1,13 @@
 inspect = require('util').inspect
 
-Buffer.prototype.XOR = (otherBuffer) ->
-  if !Buffer.isBuffer(otherBuffer) then throw new Error('Invalid otherBuffer: ' + inspect(otherBuffer))
-  if this.length isnt otherBuffer.length then throw new Error('Buffers not equal length!')
-  
-  result = []
-  result.push(this[i] ^ otherBuffer[i]) for i in [0...this.length]
-  return new Buffer(result)
+Buffer.prototype.XOR = (buf) ->
+  if !Buffer.isBuffer(buf) then throw new Error('Invalid buf: ' + inspect(buf))
 
-Buffer.prototype.XORR = (otherBuffer) ->
-  sameLengthBuff = new Buffer(0)
-  while sameLengthBuff.length < this.length
-    sameLengthBuff = Buffer.concat([sameLengthBuff, otherBuffer])
-  sameLengthBuff = sameLengthBuff.slice(0, this.length)
-  return this.XOR(sameLengthBuff)
+  xorBytes = []
+  for i in [0...this.length]
+    xorBytes.push(this[i] ^ buf[i % buf.length])
+
+  return new Buffer(xorBytes)
 
 Helpers = {}
 
@@ -69,7 +63,7 @@ Helpers.decodeXORCipher = (cipher) ->
 
   for i in [0..128]
     key = String.fromCharCode(i)
-    decoded = cipher.XORR(new Buffer(key)).toString('utf8')
+    decoded = cipher.XOR(new Buffer(key)).toString('utf8')
     score = Helpers.scoreString(decoded)
     
     if score > bestResult.score

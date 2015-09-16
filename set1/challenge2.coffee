@@ -3,10 +3,6 @@ require('../support')
 describe 'challenge2', ->
 
   describe 'buffer.XOR()', ->
-    it 'throws error if buffers not same length', ->
-      fn = -> (new Buffer([1,2])).XOR(new Buffer([1,2,3]))
-      expect(fn).toThrowError(/equal length/i)
-
     it 'throws error if non buffer passed', ->
       fn = -> (new Buffer([1,2])).XOR('not a buffer')
       expect(fn).toThrowError(/invalid/i)
