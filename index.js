@@ -2,6 +2,8 @@
 
 require('coffee-script/register');
 
+require('./support/buffer.extensions')
+
 var Jasmine = require('jasmine');
 
 var jrunner = new Jasmine();
